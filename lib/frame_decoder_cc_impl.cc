@@ -27,6 +27,7 @@
 
 #include <cstdio>
 #include <gnuradio/io_signature.h>
+#include <pmt/pmt.h>
 
 namespace gr {
   namespace ax100 {
@@ -51,6 +52,8 @@ namespace gr {
       	    d_context = new zmq::context_t(1);
 	    d_socket = new zmq::socket_t(*d_context, ZMQ_PUB);
 	    d_socket->connect(address);
+
+	    message_port_register_out(pmt::mp("out"));
 
     }
 
@@ -114,6 +117,12 @@ namespace gr {
 			if (d_socket->send(zmsg) < 0) {
 				std::printf("ZMQ send error\r\n");
 			}
+
+		        // Send by GNUradio message
+			message_port_pub(pmt::mp("out"),
+					 pmt::cons(pmt::PMT_NIL,
+						   pmt::init_u8vector(frame_len-1,
+								      frame_data+1)));
 		}
 		std::printf("\r\n------------ FRAME INFO -------------\r\n");
 		std::printf("Length: %d\r\nBytes corrected: %d\r\n", frame_len, rs_res);
