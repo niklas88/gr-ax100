@@ -128,6 +128,37 @@
     </param>
   </block>
   <block>
+    <key>ax100_beacon_parser</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(824, 617)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>ax100_beacon_parser_0</value>
+    </param>
+  </block>
+  <block>
     <key>ax100_frame_decoder_cc</key>
     <param>
       <key>alias</key>
@@ -166,6 +197,10 @@
       <value>0</value>
     </param>
     <param>
+      <key>verbose</key>
+      <value>False</value>
+    </param>
+    <param>
       <key>address</key>
       <value>"tcp://localhost:6000"</value>
     </param>
@@ -186,7 +221,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -272,7 +307,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -374,7 +409,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -593,6 +628,12 @@
       <value>0x00</value>
     </param>
   </block>
+  <connection>
+    <source_block_id>ax100_frame_decoder_cc_0</source_block_id>
+    <sink_block_id>ax100_beacon_parser_0</sink_block_id>
+    <source_key>out</source_key>
+    <sink_key>in</sink_key>
+  </connection>
   <connection>
     <source_block_id>ax100_frame_decoder_cc_0</source_block_id>
     <sink_block_id>blocks_message_debug_0</sink_block_id>
