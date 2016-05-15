@@ -19,5 +19,6 @@
 install(FILES
     ax100_frame_decoder_cc.xml
     ax100_descrambler_cc.xml
-    ax100_frame_encoder.xml DESTINATION share/gnuradio/grc/blocks
+    ax100_frame_encoder.xml
+    ax100_beacon_parser.xml DESTINATION share/gnuradio/grc/blocks
 )
