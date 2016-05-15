@@ -41,9 +41,11 @@ namespace gr {
       // ZMQ
       zmq::context_t 	*d_context;
       zmq::socket_t 	*d_socket;
+
+      bool d_verbose;
 	
      public:
-      frame_decoder_cc_impl(char *address);
+      frame_decoder_cc_impl(char *address, bool verbose);
       ~frame_decoder_cc_impl();
 
       // Where all the action really happens

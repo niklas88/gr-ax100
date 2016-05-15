@@ -46,7 +46,7 @@ namespace gr {
        * class. ax100::frame_decoder_cc::make is the public interface for
        * creating new instances.
        */
-      static sptr make(char *address);
+      static sptr make(char *address, bool verbose);
     };
 
   } // namespace ax100

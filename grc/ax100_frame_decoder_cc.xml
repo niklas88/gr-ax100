@@ -4,11 +4,24 @@
   <key>ax100_frame_decoder_cc</key>
   <category>ax100</category>
   <import>import ax100</import>
-  <make>ax100.frame_decoder_cc($address)</make>
+  <make>ax100.frame_decoder_cc($address, $verbose)</make>
   <param>
     <name>ZMQ Address</name>
     <key>address</key>
     <type>string</type>
+  </param>
+  <param>
+    <name>Verbose</name>
+    <key>verbose</key>
+    <type>bool</type>
+     <option>
+       <name>Yes</name>
+       <key>True</key>
+     </option>
+     <option>
+       <name>No</name>
+       <key>False</key>
+     </option>
   </param>
 
   <sink>

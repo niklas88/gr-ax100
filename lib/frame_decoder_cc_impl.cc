@@ -33,16 +33,16 @@ namespace gr {
   namespace ax100 {
 
     frame_decoder_cc::sptr
-    frame_decoder_cc::make(char *address)
+    frame_decoder_cc::make(char *address, bool verbose)
     {
       return gnuradio::get_initial_sptr
-        (new frame_decoder_cc_impl(address));
+        (new frame_decoder_cc_impl(address, verbose));
     }
 
     /*
      * The private constructor
      */
-    frame_decoder_cc_impl::frame_decoder_cc_impl(char *address)
+    frame_decoder_cc_impl::frame_decoder_cc_impl(char *address, bool verbose)
       : gr::sync_block("frame_decoder_cc",
               gr::io_signature::make(1, 1, sizeof(unsigned char)),
               gr::io_signature::make(0, 0, 0))
@@ -54,6 +54,8 @@ namespace gr {
 	    d_socket->connect(address);
 
 	    message_port_register_out(pmt::mp("out"));
+
+	    d_verbose = verbose;
 
     }
 
@@ -124,9 +126,11 @@ namespace gr {
 						   pmt::init_u8vector(frame_len-1,
 								      frame_data+1)));
 		}
-		std::printf("\r\n------------ FRAME INFO -------------\r\n");
-		std::printf("Length: %d\r\nBytes corrected: %d\r\n", frame_len, rs_res);
-		std::printf("Dest: %d\r\n", frame_data[0]);
+		if (d_verbose) {
+		  std::printf("\r\n------------ FRAME INFO -------------\r\n");
+		  std::printf("Length: %d\r\nBytes corrected: %d\r\n", frame_len, rs_res);
+		  std::printf("Dest: %d\r\n", frame_data[0]);
+		}
 
       }
 
