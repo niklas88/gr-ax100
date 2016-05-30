@@ -32,7 +32,8 @@ GR_PYTHON_INSTALL(
     FILES
     __init__.py
     gomx3_beacon.py
-    beacon_parser.py DESTINATION ${GR_PYTHON_DIR}/ax100
+    beacon_parser.py
+    adsb_kml.py DESTINATION ${GR_PYTHON_DIR}/ax100
 )
 
 ########################################################################

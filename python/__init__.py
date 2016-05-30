@@ -32,7 +32,7 @@ except ImportError:
 
 # import any pure python here
 from beacon_parser import beacon_parser
-
+from adsb_kml import adsb_kml
 
 
 #
