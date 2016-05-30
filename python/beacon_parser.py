@@ -50,15 +50,17 @@ class beacon_parser(gr.basic_block):
         header = CSP(packet[:4])
         # check that message is beacon
         if header.destination != 10 or header.dest_port != 30:
+            print "Not a beacon: destination address {} port {}".format(header.destination,
+                                                                        header.dest_port)
+            print
             return
         beacon_type = packet[4]
         payload = packet[4:]
 
         beacon = None
-        if header.source == 1 and beacon_type == 0:
+        if header.source == 1 and beacon_type == 0 and len(payload) == 140:
             beacon = gomx3_beacon.beacon_1_0(payload)
 
-        if beacon:
-            print(beacon)
-            print
+        print(beacon if beacon else "Beacon type {} {}".format(header.source, beacon_type))
+        print
 
