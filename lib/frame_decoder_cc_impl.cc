@@ -33,25 +33,21 @@ namespace gr {
   namespace ax100 {
 
     frame_decoder_cc::sptr
-    frame_decoder_cc::make(char *address, bool verbose)
+    frame_decoder_cc::make(bool verbose)
     {
       return gnuradio::get_initial_sptr
-        (new frame_decoder_cc_impl(address, verbose));
+        (new frame_decoder_cc_impl(verbose));
     }
 
     /*
      * The private constructor
      */
-    frame_decoder_cc_impl::frame_decoder_cc_impl(char *address, bool verbose)
+    frame_decoder_cc_impl::frame_decoder_cc_impl(bool verbose)
       : gr::sync_block("frame_decoder_cc",
               gr::io_signature::make(1, 1, sizeof(unsigned char)),
               gr::io_signature::make(0, 0, 0))
     {
 	    set_output_multiple(256*8);
-
-      	    d_context = new zmq::context_t(1);
-	    d_socket = new zmq::socket_t(*d_context, ZMQ_PUB);
-	    d_socket->connect(address);
 
 	    message_port_register_out(pmt::mp("out"));
 
@@ -65,9 +61,6 @@ namespace gr {
     frame_decoder_cc_impl::~frame_decoder_cc_impl()
     {
 	   delete d_pack;
-	   d_socket->close();
-	   delete d_socket;
-	   delete d_context;
     }
 
     int
@@ -98,7 +91,7 @@ namespace gr {
 		d_pack->pack(&frame_data[1], &in[d_tags_itr->offset + 8 - this->nitems_read(0)], frame_data[0] - 1);
 		rs_res = decode_rs_8(&frame_data[1], NULL, 0, 255 - frame_data[0] + 1);
 
-		// Send via ZMQ if RS ok
+		// Send via GNUradio message if RS ok
 		if (rs_res >= 0) {
 			// Swap CSP header
 			tmp = frame_data[4];
@@ -108,18 +101,11 @@ namespace gr {
 			frame_data[3] = frame_data[2];
 			frame_data[2] = tmp;
 
-			// Send with ZMQ
 			// len_byte + csp_packet - rs = frame_len - 32
 			frame_data[0] -= 32;
 			frame_len = frame_data[0];
-			zmq::message_t zmsg(frame_len);
 			// Get csp dest
 			frame_data[0] = ((frame_data[4] & 1) << 4) + ((frame_data[3] >> 4) & 0x0f);
-			memcpy(zmsg.data(), frame_data, frame_len);
-			if (d_socket->send(zmsg) < 0) {
-				std::printf("ZMQ send error\r\n");
-			}
-
 		        // Send by GNUradio message
 			message_port_pub(pmt::mp("out"),
 					 pmt::cons(pmt::PMT_NIL,
