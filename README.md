@@ -15,3 +15,5 @@ This fork includes:
 * ADS-B data output to KML. This block will only output <Placemark> tags. You need to
   include a proper header and footer to obtain a valid KML file.
   See http://destevez.net/wp-content/uploads/2016/05/gomx3.kml for an example.
+* It is also possible to save the data to a KISS file. For this,
+  https://github.com/daniestevez/gr-kiss is needed. See examples/ax100_rx_fm_demod.grc
