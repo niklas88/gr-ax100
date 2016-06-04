@@ -27,7 +27,6 @@ include_directories(
 )
 link_directories(${Boost_LIBRARY_DIRS})
 list(APPEND ax100_sources
-    ax100rs.cc
     frame_decoder_cc_impl.cc
     descrambler_cc_impl.cc
     frame_encoder_impl.cc )
@@ -39,7 +38,7 @@ if(NOT ax100_sources)
 endif(NOT ax100_sources)
 
 add_library(gnuradio-ax100 SHARED ${ax100_sources})
-target_link_libraries(gnuradio-ax100 ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
+target_link_libraries(gnuradio-ax100 fec ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
 set_target_properties(gnuradio-ax100 PROPERTIES DEFINE_SYMBOL "gnuradio_ax100_EXPORTS")
 
 if(APPLE)

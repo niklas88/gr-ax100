@@ -23,11 +23,14 @@
 #endif
 
 #include "frame_decoder_cc_impl.h"
-#include "ax100rs.h"
 
 #include <cstdio>
 #include <gnuradio/io_signature.h>
 #include <pmt/pmt.h>
+
+extern "C" {
+#include <fec.h>
+}
 
 namespace gr {
   namespace ax100 {
