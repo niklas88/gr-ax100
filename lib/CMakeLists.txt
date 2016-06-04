@@ -27,7 +27,8 @@ include_directories(
 )
 link_directories(${Boost_LIBRARY_DIRS})
 list(APPEND ax100_sources
-    frame_decoder_cc_impl.cc)
+    frame_decoder_cc_impl.cc
+    gomx3_rs_decode_impl.cc)
 
 set(ax100_sources "${ax100_sources}" PARENT_SCOPE)
 if(NOT ax100_sources)
@@ -74,6 +75,7 @@ target_link_libraries(
   ${Boost_LIBRARIES}
   ${CPPUNIT_LIBRARIES}
   gnuradio-ax100
+  fec
 )
 
 GR_ADD_TEST(test_ax100 test-ax100)
