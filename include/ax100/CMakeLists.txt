@@ -22,8 +22,5 @@
 ########################################################################
 install(FILES
     api.h
-    ax100.h
-    frame_decoder_cc.h
-    descrambler_cc.h
-    frame_encoder.h DESTINATION include/ax100
+    frame_decoder_cc.h DESTINATION include/ax100
 )
