@@ -6,8 +6,10 @@ This transceiver is used in the satellite GOMX-3.
 You need to install Phil Karn's KA9Q libfec.
 This is a fork that builds correctly on modern systems: https://github.com/daniestevez/libfec
 
-You also need gr-synctags:
-https://github.com/daniestevez/gr-synctags
+You also need to install the following OOT modules:
+* gr-synctags https://github.com/daniestevez/gr-synctags
+* gr-csp https://github.com/daniestevez/gr-csp
+* gr-kiss https://github.com/daniestevez/gr-kiss
 
 You can use this sample file from GOMX-3
 https://drive.google.com/open?id=0B2pPGQkeEAfdd1VCa2d0UWFXR1k
