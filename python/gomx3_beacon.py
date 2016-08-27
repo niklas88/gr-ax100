@@ -24,10 +24,10 @@ from datetime import datetime
 
 class beacon_1_0(object):
     def __init__(self, payload):
-        assert payload[0] == 0 # check type
-
+        if payload[0] != 0 or len(payload) != 140:
+            raise ValueError("Malformed beacon of type 1 0")
+        
         data = payload[1:-4]
-        assert len(data) == 135
         eps, com, obc, adcs, adsb = struct.unpack("49s14s14s20s38s", data)
 
         self.eps_timestamp, \

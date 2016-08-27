@@ -47,12 +47,19 @@ class beacon_parser(gr.basic_block):
             return
 
         packet = array.array("B", pmt.u8vector_elements(msg))
-        header = CSP(packet[:4])
+        try:
+            header = CSP(packet[:4])
+        except ValueError as e:
+            print e
+            return
         # check that message is beacon
         if header.destination != 10 or header.dest_port != 30:
             print "Not a beacon: destination address {} port {}".format(header.destination,
                                                                         header.dest_port)
             print
+            return
+        if len(packet) < 5:
+            print "Malformed beacon (too short)"
             return
         beacon_type = packet[4]
         payload = packet[4:]
