@@ -23,5 +23,6 @@
 install(FILES
     api.h
     frame_decoder_cc.h
-    gomx3_rs_decode.h DESTINATION include/ax100
+    gomx3_rs_decode.h
+    gomx1_decode.h DESTINATION include/ax100
 )

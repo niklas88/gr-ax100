@@ -28,7 +28,9 @@ include_directories(
 link_directories(${Boost_LIBRARY_DIRS})
 list(APPEND ax100_sources
     frame_decoder_cc_impl.cc
-    gomx3_rs_decode_impl.cc)
+    gomx3_rs_decode_impl.cc
+    gomx1_decode_impl.cc
+    randomizer.c)
 
 set(ax100_sources "${ax100_sources}" PARENT_SCOPE)
 if(NOT ax100_sources)
