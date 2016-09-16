@@ -172,6 +172,37 @@
     </param>
   </block>
   <block>
+    <key>ax100_gomx1_beacon_parser</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(1088, 568)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>ax100_gomx1_beacon_parser_0</value>
+    </param>
+  </block>
+  <block>
     <key>ax100_gomx1_decode</key>
     <param>
       <key>alias</key>
@@ -269,11 +300,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1128, 432)</value>
+      <value>(1136, 432)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -599,6 +630,37 @@
     </param>
   </block>
   <block>
+    <key>csp_print_header</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(1128, 640)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>csp_print_header_0</value>
+    </param>
+  </block>
+  <block>
     <key>digital_correlate_access_code_tag_bb</key>
     <param>
       <key>access_code</key>
@@ -830,9 +892,21 @@
   </connection>
   <connection>
     <source_block_id>ax100_gomx1_decode_0</source_block_id>
+    <sink_block_id>ax100_gomx1_beacon_parser_0</sink_block_id>
+    <source_key>out</source_key>
+    <sink_key>in</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>ax100_gomx1_decode_0</source_block_id>
     <sink_block_id>blocks_message_debug_0</sink_block_id>
     <source_key>out</source_key>
     <sink_key>print_pdu</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>ax100_gomx1_decode_0</source_block_id>
+    <sink_block_id>csp_print_header_0</sink_block_id>
+    <source_key>out</source_key>
+    <sink_key>in</sink_key>
   </connection>
   <connection>
     <source_block_id>blocks_conjugate_cc_0</source_block_id>

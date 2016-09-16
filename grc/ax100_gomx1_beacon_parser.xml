@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<block>
+  <name>GOMX-1 Beacon Parser</name>
+  <key>ax100_gomx1_beacon_parser</key>
+  <category>[ax100]</category>
+  <import>import ax100</import>
+  <make>ax100.gomx1_beacon_parser()</make>
+   <sink>
+    <name>in</name>
+    <type>message</type>
+  </sink>
+</block>
