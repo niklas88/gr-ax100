@@ -24,7 +24,7 @@
 #include <ax100/gomx1_decode.h>
 #include <pmt/pmt.h>
 
-#define PACKET_LEN 248
+#define RS_LEN 255
 #define HEADER_LEN 3
 
 namespace gr {
@@ -34,7 +34,7 @@ namespace gr {
     {
      private:
       bool d_verbose;
-      char d_ccsds_sequence[PACKET_LEN];
+      char d_ccsds_sequence[RS_LEN];
       
      public:
       gomx1_decode_impl(bool verbose);

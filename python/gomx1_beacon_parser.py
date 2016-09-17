@@ -46,10 +46,12 @@ class gomx1_beacon_parser(gr.basic_block):
             return
 
         packet = array.array("B", pmt.u8vector_elements(msg))
-        # TODO: sanity check
         payload = packet[4:]
 
-        beacon = gomx1_beacon.gomx1_beacon(payload)
+        try:
+            beacon = gomx1_beacon.gomx1_beacon(payload)
+        except ValueError:
+            beacon = "Not a beacon"
 
         print(beacon)
         print

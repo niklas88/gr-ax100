@@ -51,7 +51,7 @@ namespace gr {
       d_verbose = verbose;
 
       // init FEC
-      ccsds_generate_sequence(d_ccsds_sequence, PACKET_LEN);
+      ccsds_generate_sequence(d_ccsds_sequence, RS_LEN);
 
       message_port_register_out(pmt::mp("out"));
       message_port_register_in(pmt::mp("in"));
@@ -83,27 +83,50 @@ namespace gr {
     void
     gomx1_decode_impl::msg_handler (pmt::pmt_t pmt_msg) {
       pmt::pmt_t msg = pmt::cdr(pmt_msg);
-      uint8_t data[PACKET_LEN + HEADER_LEN];
+      uint8_t data[HEADER_LEN + RS_LEN];
+      uint8_t data_scratch[RS_LEN];
       uint8_t tmp;
       int rs_res;
       int frame_len;
       size_t offset(0);
+      // Lengths of known packets
+      static int known_lengths[] = { 0xf8, 0xf6, 0x28 };
+      int i;
 
       memcpy(data, pmt::uniform_vector_elements(msg, offset), sizeof(data));
 
-      ccsds_xor_sequence(data + HEADER_LEN, d_ccsds_sequence, PACKET_LEN);
+      ccsds_xor_sequence(data + HEADER_LEN, d_ccsds_sequence, RS_LEN);
 
-      rs_res = decode_rs_8(data + HEADER_LEN, NULL, 0, 255 - PACKET_LEN);
+      // first try with length in header
+      // (Golay decoder not implemented yet)
+      frame_len = data[2];
+
+      memcpy(data_scratch, data + HEADER_LEN, frame_len);
+      rs_res = decode_rs_8(data_scratch, NULL, 0, RS_LEN - frame_len);
+
+      if (rs_res < 0) {
+	// try with known packet sizes
+	for (i = 0; i < sizeof(known_lengths)/sizeof(int); i++) {
+	  if (d_verbose) {
+	    std::printf("RS decode failed with frame length = %d. Trying length = %d.\n",
+			frame_len, known_lengths[i]);
+	  }
+	  frame_len = known_lengths[i];
+	  memcpy(data_scratch, data + HEADER_LEN, frame_len);
+	  rs_res = decode_rs_8(data_scratch, NULL, 0, RS_LEN - frame_len);
+	  if (rs_res >= 0) break;
+	}
+      }
 
       // Send via GNUradio message if RS ok
       if (rs_res >= 0) {
 	// Swap CSP header
-	tmp = data[HEADER_LEN];
-	data[HEADER_LEN] = data[HEADER_LEN + 3];
-	data[HEADER_LEN + 3] = tmp;
-	tmp = data[HEADER_LEN + 1];
-	data[HEADER_LEN + 1] = data[HEADER_LEN + 2];
-	data[HEADER_LEN + 2] = tmp;
+	tmp = data_scratch[0];
+	data_scratch[0] = data_scratch[3];
+	data_scratch[3] = tmp;
+	tmp = data_scratch[1];
+	data_scratch[1] = data_scratch[2];
+	data_scratch[2] = tmp;
 	
 	if (d_verbose) {
 	  std::printf("RS decode OK. Byte errors: %d.\n", rs_res);
@@ -112,7 +135,7 @@ namespace gr {
 	// Send by GNUradio message
 	message_port_pub(pmt::mp("out"),
 			 pmt::cons(pmt::PMT_NIL,
-				   pmt::init_u8vector(PACKET_LEN - 32, data + HEADER_LEN)));
+				   pmt::init_u8vector(frame_len - 32, data_scratch)));
       }
       else if (d_verbose) {
 	std::printf("RS decode failed.\n");

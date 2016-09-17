@@ -22,15 +22,23 @@
 import struct
 from datetime import datetime
 
+beacon_a_len = 207
+beacon_b_len = 205
+
 class gomx1_beacon(object):
     def __init__(self, payload):
-        # TODO: sanity check
+        if len(payload) < 5:
+            raise ValueError("Malformed beacon: too short")
 
         beacon_time, self.beacon_flags = struct.unpack('>IB', payload[:5])
         beacon = payload[5:]
         self.beacon_time = datetime.utcfromtimestamp(beacon_time)
-        # TODO: detect also beacon B
-        self.beacon = gomx1_beacon_a(beacon)
+        if len(beacon) == beacon_a_len:
+            self.beacon = gomx1_beacon_a(beacon)
+        elif len(beacon) == beacon_b_len:
+            self.beacon = "Beacon B (not yet implemented)"
+        else:
+            raise ValueError("Malformed or unknown beacon")
 
     def __str__(self):
         return ("""Timestamp:\t{}
@@ -39,7 +47,8 @@ Flags:\t\t{}
 
 class gomx1_beacon_a(object):
     def __init__(self, payload):
-        # TODO: sanity check
+        if len(payload) != beacon_a_len:
+            raise ValueError("Malformed beacon of type A")
 
         self.obc_bootcount, temp1, temp2, panel_temp, self.byte_corr_tot, \
           self.rx, self.rx_err, self.tx, self.last_temp_a, self.last_temp_b, \
