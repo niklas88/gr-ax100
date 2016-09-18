@@ -28,6 +28,7 @@
 extern "C" {
 #include <fec.h>
 #include "randomizer.h"
+#include "golay24.h"
 }
 
 namespace gr {
@@ -86,30 +87,62 @@ namespace gr {
       uint8_t data[HEADER_LEN + RS_LEN];
       uint8_t data_scratch[RS_LEN];
       uint8_t tmp;
-      int rs_res;
-      int frame_len;
+      int rs_res, golay_res;
+      int frame_len = -1;
       size_t offset(0);
       // Lengths of known packets
       static int known_lengths[] = { 0xf8, 0xf6, 0x28 };
+      register uint32_t length_field;
       int i;
 
       memcpy(data, pmt::uniform_vector_elements(msg, offset), sizeof(data));
 
       ccsds_xor_sequence(data + HEADER_LEN, d_ccsds_sequence, RS_LEN);
 
-      // first try with length in header
-      // (Golay decoder not implemented yet)
-      frame_len = data[2];
+      // decode length field
+      length_field = (data[0] << 24) | (data[1] << 16) | (data[2] << 8);
+      // reverse bit order
+      length_field = ((length_field & 0xaaaaaaaa) >> 1) | ((length_field & 0x55555555) << 1);
+      length_field = ((length_field & 0xcccccccc) >> 2) | ((length_field & 0x33333333) << 2);
+      length_field = ((length_field & 0xf0f0f0f0) >> 4) | ((length_field & 0x0f0f0f0f) << 4);
+      length_field = ((length_field & 0xff00ff00) >> 8) | ((length_field & 0x00ff00ff) << 8);
+      length_field = (length_field >> 16) | (length_field << 16);
+      // decode golay
+      golay_res = decode_golay24(&length_field);
+      if (golay_res >= 0) {
+	if (d_verbose) {
+	  std::printf("Golay decode OK. Bit errors = %d.\n", golay_res);
+	}
+	
+	// reverse bit order
+	length_field = ((length_field & 0xaaaaaaaa) >> 1) | ((length_field & 0x55555555) << 1);
+	length_field = ((length_field & 0xcccccccc) >> 2) | ((length_field & 0x33333333) << 2);
+	length_field = ((length_field & 0xf0f0f0f0) >> 4) | ((length_field & 0x0f0f0f0f) << 4);
+	length_field = ((length_field & 0xff00ff00) >> 8) | ((length_field & 0x00ff00ff) << 8);
+	length_field = (length_field >> 16) | (length_field << 16);
 
-      memcpy(data_scratch, data + HEADER_LEN, frame_len);
-      rs_res = decode_rs_8(data_scratch, NULL, 0, RS_LEN - frame_len);
+	frame_len = (length_field >> 8) & 0xff;
 
-      if (rs_res < 0) {
+	// Do RS decoding
+	memcpy(data_scratch, data + HEADER_LEN, frame_len);
+	rs_res = decode_rs_8(data_scratch, NULL, 0, RS_LEN - frame_len);
+      }
+      else if (d_verbose) {
+	std::printf("Golay decode failed.\n");
+      }
+
+      if ((golay_res < 0) || (rs_res < 0)) {
 	// try with known packet sizes
 	for (i = 0; i < sizeof(known_lengths)/sizeof(int); i++) {
 	  if (d_verbose) {
-	    std::printf("RS decode failed with frame length = %d. Trying length = %d.\n",
+	    if (frame_len < 0) {
+	      std::printf("Frame length unknown. Trying length = %d.\n", known_lengths[i]);
+	    }
+	    else {
+	      std::printf("RS decode failed with frame length = %d. Trying length = %d.\n",
 			frame_len, known_lengths[i]);
+	    }
+	    
 	  }
 	  frame_len = known_lengths[i];
 	  memcpy(data_scratch, data + HEADER_LEN, frame_len);
