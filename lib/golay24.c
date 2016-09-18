@@ -39,10 +39,7 @@ static const uint32_t H[N] = { 0x8008ed, 0x4001db, 0x2003b5, 0x100769,
 			       0x80ed1, 0x40da3, 0x20b47, 0x1068f,
 			       0x8d1d, 0x4a3b, 0x2477, 0x1ffe };
 
-static const uint16_t B[N] = { 0x8ed, 0x1db, 0x3b5, 0x769,
-			       0xed1, 0xda3, 0xb47, 0x68f,
-			       0xd1d, 0xa3b, 0x477, 0xffe };
-  
+#define B(i) (H[i] & 0xfff)
 
 int decode_golay24(uint32_t *data) {
   register uint32_t r = *data;
@@ -67,8 +64,8 @@ int decode_golay24(uint32_t *data) {
 
   // Step 3. if w(s + B[i]) <= 2, then e = (s + B[i], e_{i+1}) and go to step 8
   for (i = 0; i < N; i++) {
-    if (__builtin_popcount(s ^ B[i]) <= 2) {
-      e = s ^ B[i];
+    if (__builtin_popcount(s ^ B(i)) <= 2) {
+      e = s ^ B(i);
       e <<= N;
       e |= 1 << (N - i - 1);
       goto step8;
@@ -79,7 +76,7 @@ int decode_golay24(uint32_t *data) {
   q = 0;
   for (i = 0; i < N; i++) {
     q <<= 1;
-    q |= __builtin_parity(B[i] & s);
+    q |= __builtin_parity(B(i) & s);
   }
 
   // Step 5. If w(q) <= 3, then e = (0, q) and go to step 8
@@ -90,9 +87,9 @@ int decode_golay24(uint32_t *data) {
   
   // Step 6. If w(q + B[i]) <= 2, then e = (e_{i+1}, q + B[i]) and got to step 8
   for (i = 0; i < N; i++) {
-    if (__builtin_popcount(q ^ B[i]) <= 2) {
+    if (__builtin_popcount(q ^ B(i)) <= 2) {
       e = 1 << (2*N - i - 1);
-      e |= q ^ B[i];
+      e |= q ^ B(i);
       goto step8;
     }
   }
@@ -106,4 +103,3 @@ int decode_golay24(uint32_t *data) {
 
   return __builtin_popcount(e);
 }
-	
