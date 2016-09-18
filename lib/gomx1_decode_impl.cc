@@ -100,28 +100,14 @@ namespace gr {
       ccsds_xor_sequence(data + HEADER_LEN, d_ccsds_sequence, RS_LEN);
 
       // decode length field
-      length_field = (data[0] << 24) | (data[1] << 16) | (data[2] << 8);
-      // reverse bit order
-      length_field = ((length_field & 0xaaaaaaaa) >> 1) | ((length_field & 0x55555555) << 1);
-      length_field = ((length_field & 0xcccccccc) >> 2) | ((length_field & 0x33333333) << 2);
-      length_field = ((length_field & 0xf0f0f0f0) >> 4) | ((length_field & 0x0f0f0f0f) << 4);
-      length_field = ((length_field & 0xff00ff00) >> 8) | ((length_field & 0x00ff00ff) << 8);
-      length_field = (length_field >> 16) | (length_field << 16);
-      // decode golay
+      length_field = (data[0] << 16) | (data[1] << 8) | data[2];
       golay_res = decode_golay24(&length_field);
       if (golay_res >= 0) {
 	if (d_verbose) {
 	  std::printf("Golay decode OK. Bit errors = %d.\n", golay_res);
 	}
-	
-	// reverse bit order
-	length_field = ((length_field & 0xaaaaaaaa) >> 1) | ((length_field & 0x55555555) << 1);
-	length_field = ((length_field & 0xcccccccc) >> 2) | ((length_field & 0x33333333) << 2);
-	length_field = ((length_field & 0xf0f0f0f0) >> 4) | ((length_field & 0x0f0f0f0f) << 4);
-	length_field = ((length_field & 0xff00ff00) >> 8) | ((length_field & 0x00ff00ff) << 8);
-	length_field = (length_field >> 16) | (length_field << 16);
 
-	frame_len = (length_field >> 8) & 0xff;
+	frame_len = length_field & 0xff;
 
 	// Do RS decoding
 	memcpy(data_scratch, data + HEADER_LEN, frame_len);

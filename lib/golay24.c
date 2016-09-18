@@ -35,10 +35,14 @@
 
 #define N 12
 
-static const uint32_t H[N] = { 0x7ff800, 0xee2400, 0xdc5200, 0xb8b100, 0xf16080, 0xe2d040,
-			       0xc5b020, 0x8b7010, 0x96e008, 0xadc004, 0xdb8002, 0xb71001 };
-static const uint16_t B[N] = { 0x7ff, 0xee2, 0xdc5, 0xb8b, 0xf16, 0xe2d,
-			       0xc5b, 0x8b7, 0x96e, 0xadc, 0xdb8, 0xb71 };
+static const uint32_t H[N] = { 0x8008ed, 0x4001db, 0x2003b5, 0x100769,
+			       0x80ed1, 0x40da3, 0x20b47, 0x1068f,
+			       0x8d1d, 0x4a3b, 0x2477, 0x1ffe };
+
+static const uint16_t B[N] = { 0x8ed, 0x1db, 0x3b5, 0x769,
+			       0xed1, 0xda3, 0xb47, 0x68f,
+			       0xd1d, 0xa3b, 0x477, 0xffe };
+  
 
 int decode_golay24(uint32_t *data) {
   register uint32_t r = *data;
@@ -54,52 +58,52 @@ int decode_golay24(uint32_t *data) {
     s |= __builtin_parity(H[i] & r);
   }
 
-  // Step 2. if w(s) <= 3, then e = (0,s) and go to step 8
-  if (__builtin_popcount(s) > 3) {
-    // Step 3. if w(s + B[i]) <= 2, then e = (e_{i+1} , s + B[i]) and go to step 8
-    for (i = 0; i < N; i++) {
-      if (__builtin_popcount(s ^ B[i]) <= 2) {
-	e = 1 << (2*N - i - 1);
-	e |= s ^ B[i];
-	break;
-      }
-    }
-    if (i == N) {
-      // Step 4. compute q = B*s
-      q = 0;
-      for (i = 0; i < N; i++) {
-	q <<= 1;
-	q |= __builtin_parity(B[i] & s);
-      }
+  // Step 2. if w(s) <= 3, then e = (s, 0) and go to step 8
+  if (__builtin_popcount(s) <= 3) {
+    e = s;
+    e <<= N;
+    goto step8;
+  }
 
-      // Step 5. If w(q) <= 3, then e = (q, 0) and go to step 8
-      if (__builtin_popcount(q) > 3) {
-	// Step 6. If w(q + B[i]) <= 2, then e = (q + B[i], e_{i+1}) and got to step 8
-	for (i = 0; i < N; i++) {
-	  if (__builtin_popcount(q ^ B[i]) <= 2) {
-	    e = q ^ B[i];
-	    e <<= N;
-	    e |= 1 << (N - i - 1);
-	    break;
-	  }
-	}
-	if (i == N) {
-	  // Step 7. r is uncorrectable
-	  return -1;
-	}
-      }
-      else {
-	e = q;
-	e <<= N;
-      }
+  // Step 3. if w(s + B[i]) <= 2, then e = (s + B[i], e_{i+1}) and go to step 8
+  for (i = 0; i < N; i++) {
+    if (__builtin_popcount(s ^ B[i]) <= 2) {
+      e = s ^ B[i];
+      e <<= N;
+      e |= 1 << (N - i - 1);
+      goto step8;
     }
   }
-  else {
-    e = s;
+
+  // Step 4. compute q = B*s
+  q = 0;
+  for (i = 0; i < N; i++) {
+    q <<= 1;
+    q |= __builtin_parity(B[i] & s);
+  }
+
+  // Step 5. If w(q) <= 3, then e = (0, q) and go to step 8
+  if (__builtin_popcount(q) <= 3) {
+    e = q;
+    goto step8;
   }
   
+  // Step 6. If w(q + B[i]) <= 2, then e = (e_{i+1}, q + B[i]) and got to step 8
+  for (i = 0; i < N; i++) {
+    if (__builtin_popcount(q ^ B[i]) <= 2) {
+      e = 1 << (2*N - i - 1);
+      e |= q ^ B[i];
+      goto step8;
+    }
+  }
+
+  // Step 7. r is uncorrectable
+  return -1;
+
+ step8:
   // Step 8. c = r + e
   *data = r ^ e;
 
   return __builtin_popcount(e);
 }
+	
