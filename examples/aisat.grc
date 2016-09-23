@@ -46,7 +46,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>gomx_1</value>
+      <value>aisat</value>
     </param>
     <param>
       <key>max_nouts</key>
@@ -172,37 +172,6 @@
     </param>
   </block>
   <block>
-    <key>ax100_gomx1_beacon_parser</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(1088, 568)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>ax100_gomx1_beacon_parser_0</value>
-    </param>
-  </block>
-  <block>
     <key>ax100_gomx1_decode</key>
     <param>
       <key>alias</key>
@@ -222,7 +191,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(384, 484)</value>
+      <value>(80, 484)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -304,7 +273,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1136, 432)</value>
+      <value>(1128, 704)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -313,37 +282,6 @@
     <param>
       <key>id</key>
       <value>blocks_message_debug_0</value>
-    </param>
-  </block>
-  <block>
-    <key>blocks_message_debug</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(984, 680)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>blocks_message_debug_1</value>
     </param>
   </block>
   <block>
@@ -417,7 +355,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(664, 672)</value>
+      <value>(712, 712)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -688,7 +626,7 @@
     </param>
     <param>
       <key>file</key>
-      <value>gomx-1.wav</value>
+      <value>aisat.wav</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -720,6 +658,53 @@
     </param>
   </block>
   <block>
+    <key>csp_check_crc</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(640, 472)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>csp_check_crc_0</value>
+    </param>
+    <param>
+      <key>include_header</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>verbose</key>
+      <value>True</value>
+    </param>
+  </block>
+  <block>
     <key>csp_print_header</key>
     <param>
       <key>alias</key>
@@ -735,7 +720,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -748,6 +733,45 @@
     <param>
       <key>id</key>
       <value>csp_print_header_0</value>
+    </param>
+  </block>
+  <block>
+    <key>csp_swap_crc</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(352, 488)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>csp_swap_crc_0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
     </param>
   </block>
   <block>
@@ -982,25 +1006,7 @@
   </connection>
   <connection>
     <source_block_id>ax100_gomx1_decode_0</source_block_id>
-    <sink_block_id>ax100_gomx1_beacon_parser_0</sink_block_id>
-    <source_key>out</source_key>
-    <sink_key>in</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>ax100_gomx1_decode_0</source_block_id>
-    <sink_block_id>blocks_message_debug_1</sink_block_id>
-    <source_key>out</source_key>
-    <sink_key>print_pdu</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>ax100_gomx1_decode_0</source_block_id>
-    <sink_block_id>blocks_socket_pdu_0</sink_block_id>
-    <source_key>out</source_key>
-    <sink_key>pdus</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>ax100_gomx1_decode_0</source_block_id>
-    <sink_block_id>csp_print_header_0</sink_block_id>
+    <sink_block_id>csp_swap_crc_0</sink_block_id>
     <source_key>out</source_key>
     <sink_key>in</sink_key>
   </connection>
@@ -1029,12 +1035,6 @@
     <sink_key>in</sink_key>
   </connection>
   <connection>
-    <source_block_id>blocks_tagged_stream_to_pdu_0</source_block_id>
-    <sink_block_id>blocks_message_debug_0</sink_block_id>
-    <source_key>pdus</source_key>
-    <sink_key>print_pdu</sink_key>
-  </connection>
-  <connection>
     <source_block_id>blocks_unpacked_to_packed_xx_0</source_block_id>
     <sink_block_id>blocks_tagged_stream_multiply_length_0</sink_block_id>
     <source_key>0</source_key>
@@ -1045,6 +1045,18 @@
     <sink_block_id>hilbert_fc_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>csp_check_crc_0</source_block_id>
+    <sink_block_id>csp_print_header_0</sink_block_id>
+    <source_key>ok</source_key>
+    <sink_key>in</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>csp_swap_crc_0</source_block_id>
+    <sink_block_id>csp_check_crc_0</sink_block_id>
+    <source_key>out</source_key>
+    <sink_key>in</sink_key>
   </connection>
   <connection>
     <source_block_id>digital_correlate_access_code_tag_bb_0</source_block_id>
