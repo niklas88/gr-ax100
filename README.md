@@ -3,10 +3,11 @@
 GNUradio decoder for transceivers from GomSpace.
 
 This was originally a fork of some code from GomSpace for the NanoCom AX100
-transceiver, which is used in GOMX-3. Since then, support for the NanoCom U482C
-transceiver used in GOMX-1 and other satellites has been also added.
+transceiver, which is used in GOMX-3 and other satellites. Since then, support
+for the NanoCom U482C transceiver used in GOMX-1 and other satellites has been
+also added.
 
-You can find a complete receivers for GOMX-3, GOMX-1, AISAT and ATEHNOXAT-1
+You can find a complete receivers for several satellites
 using this software in [gr-satellites](https://github.com/daniestevez/gr-satellites).
 
 You need to install Phil Karn's KA9Q libfec.
