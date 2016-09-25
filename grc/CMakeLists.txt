@@ -17,7 +17,6 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 install(FILES
-    ax100_frame_decoder_cc.xml
     ax100_beacon_parser.xml
     ax100_adsb_kml.xml
     ax100_gomx3_rs_decode.xml

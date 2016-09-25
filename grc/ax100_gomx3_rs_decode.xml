@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <block>
-  <name>GOMX-3 RS decode</name>
+  <name>NanoCom AX100 RS decode</name>
   <key>ax100_gomx3_rs_decode</key>
-  <category>ax100</category>
+  <category>[GomSpace NanoCom]</category>
   <import>import ax100</import>
   <make>ax100.gomx3_rs_decode($verbose)</make>
   <param>

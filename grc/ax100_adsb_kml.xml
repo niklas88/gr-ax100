@@ -2,7 +2,7 @@
 <block>
   <name>GOMX-3 ADS-B to KML</name>
   <key>ax100_adsb_kml</key>
-  <category>ax100</category>
+  <category>[GomSpace NanoCom]</category>
   <import>import ax100</import>
   <make>ax100.adsb_kml()</make>
   <sink>

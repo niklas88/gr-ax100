@@ -2,7 +2,7 @@
 <block>
   <name>GOMX-1 Beacon Parser</name>
   <key>ax100_gomx1_beacon_parser</key>
-  <category>[ax100]</category>
+  <category>[GomSpace NanoCom]</category>
   <import>import ax100</import>
   <make>ax100.gomx1_beacon_parser()</make>
    <sink>
