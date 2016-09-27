@@ -22,6 +22,8 @@
 #include "config.h"
 #endif
 
+#include <cstdio>
+
 #include <gnuradio/io_signature.h>
 #include "gomx1_decode_impl.h"
 
